@@ -1,4 +1,5 @@
-#[allow(unused_imports)]
+mod commands;
+
 use std::io::{self, Write};
 
 fn main() {
@@ -10,10 +11,16 @@ fn main() {
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
 
-        if input.trim() == "exit 0" {
-            std::process::exit(0)
+        match input.trim() {
+            n if n == "exit 0" => {
+                std::process::exit(0);
+            }
+            n if n.starts_with("echo") => {
+                commands::echo::echo(n);
+            }
+            n => {
+                println!("{}: command not found", n);
+            }
         }
-
-        println!("{}: command not found", input.trim());
     }
 }
