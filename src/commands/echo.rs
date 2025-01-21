@@ -1,10 +1,5 @@
-pub fn echo(s: &str) {
-    let mut args = s.split(" ");
+pub static TYPE: &str = "echo";
 
-    match args.next() {
-        Some(_) => {
-            println!("{}", args.collect::<Vec<&str>>().join(" "));
-        }
-        None => println!(""),
-    }
+pub fn echo(args: Vec<&str>) {
+    println!("{}", args.join(" "));
 }
