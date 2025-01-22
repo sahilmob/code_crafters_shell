@@ -48,22 +48,20 @@ pub fn handle_executables(path: String, cmd: &str) -> String {
     format!("{} not found", cmd)
 }
 
-pub fn r#type(args: &mut Vec<&str>) {
+pub fn r#type(args: &mut Vec<String>) -> String {
     if args.is_empty() {
-        println!("not found")
+        return "not found".to_string();
     }
 
     let hm = typ!(exit::TYPE, echo::TYPE, self::TYPE);
 
-    let cmd = &args.pop().unwrap();
+    let cmd = args.remove(0);
 
-    match hm.get(cmd) {
-        Some(v) => println!("{}", v),
+    match hm.get(cmd.as_str()) {
+        Some(v) => format!("{}", v),
         None => match env::var("PATH") {
-            Ok(v) => {
-                println!("{}", handle_executables(v, &cmd))
-            }
-            Err(_) => println!("{}: not found", cmd),
+            Ok(v) => format!("{}", handle_executables(v, &cmd)),
+            Err(_) => format!("{}: not found", cmd),
         },
-    };
+    }
 }
