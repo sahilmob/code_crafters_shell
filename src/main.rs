@@ -19,11 +19,10 @@ fn run(cmds: &mut Vec<String>) -> String {
         cmd if cmd == "exit" => exit::exit(&mut cmd_args),
         cmd if cmd == "echo" => echo::echo(&mut cmd_args),
         cmd if cmd == "type" => r#type::r#type(&mut cmd_args),
-        cmd if !cmd.is_empty() => format!("{}: command not found", cmd),
         _ => {
             args.insert(0, cmd);
             exec_bin(args)
-        }
+        } // cmd if !cmd.is_empty() => format!("{}: command not found", cmd),
     };
 
     if !args.is_empty() {
