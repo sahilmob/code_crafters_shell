@@ -7,9 +7,9 @@ use internal::helpers::drain_current_cmd_args::*;
 use std::io::{self, Write};
 
 fn run(cmds: &mut Vec<String>) -> String {
-    if cmds.is_empty() {
-        return "".to_string();
-    }
+    // if cmds.is_empty() {
+    //     return "".to_string();
+    // }
 
     let cmd = cmds.remove(0);
     let args = cmds;
@@ -24,8 +24,6 @@ fn run(cmds: &mut Vec<String>) -> String {
             exec_bin(&mut cmd_args)
         }
     };
-
-    dbg!(&args);
 
     if !args.is_empty() {
         args.push(result);
