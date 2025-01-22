@@ -13,13 +13,13 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
             let args = drain_current_cmd_args(args);
 
             return match Command::new(cmd).args(args).output() {
-                Ok(v) => v.status.to_string(),
+                Ok(v) => String::from_utf8(v.stdout).unwrap(),
                 Err(e) => e.to_string(),
             };
         }
     }
 
-    format!("{} not found", cmd)
+    format!("{}: command not found", cmd)
 }
 
 pub fn exec_bin(args: &mut Vec<String>) -> String {

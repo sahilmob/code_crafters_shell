@@ -22,7 +22,7 @@ fn run(cmds: &mut Vec<String>) -> String {
         _ => {
             args.insert(0, cmd);
             exec_bin(args)
-        } // cmd if !cmd.is_empty() => format!("{}: command not found", cmd),
+        }
     };
 
     if !args.is_empty() {
