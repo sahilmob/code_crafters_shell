@@ -5,5 +5,7 @@ pub fn exit(args: &mut Vec<&str>) {
         std::process::exit(0)
     }
 
-    std::process::exit(args[0].parse::<i32>().unwrap_or(0));
+    let code = args.pop().unwrap();
+
+    std::process::exit(code.parse::<i32>().unwrap_or(0));
 }

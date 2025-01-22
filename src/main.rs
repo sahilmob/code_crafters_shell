@@ -3,21 +3,28 @@ mod commands;
 use commands::*;
 use std::io::{self, Write};
 
-fn work_loop(cmd: &str, args: &mut Vec<&str>) {
+fn do_work(cmds: Vec<&str>) {
+    let mut cmds_iter = cmds.iter();
+    let cmd = cmds_iter.next();
+    let mut args = cmds_iter.map(|s| *s).collect::<Vec<&str>>();
+
     match cmd {
-        cmd if cmd == "exit" => {
-            exit::exit(args);
-        }
-        cmd if cmd == "echo" => {
-            echo::echo(args);
-        }
-        cmd if cmd == "type" => {
-            r#type::typ(args);
-        }
-        cmd if !cmd.is_empty() => {
-            println!("{}: command not found", cmd);
-        }
-        _ => (),
+        Some(cmd) => match cmd {
+            cmd if *cmd == "exit" => {
+                exit::exit(&mut args);
+            }
+            cmd if *cmd == "echo" => {
+                echo::echo(&mut args);
+            }
+            cmd if *cmd == "type" => {
+                r#type::r#type(&mut args);
+            }
+            cmd if !cmd.is_empty() => {
+                println!("{}: command not found", cmd);
+            }
+            _ => (),
+        },
+        None => (),
     }
 }
 
@@ -30,15 +37,11 @@ fn main() {
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
 
-        let mut cmd_iter = input.trim().split(" ");
-        let cmd = cmd_iter.next();
-        let mut args: Vec<&str> = cmd_iter.collect();
+        let cmd_iter = input.trim().split(" ");
+        let cmds: Vec<&str> = cmd_iter.collect();
 
-        match cmd {
-            Some(cmd) => {
-                work_loop(cmd, &mut args);
-            }
-            None => (),
+        if !cmds.is_empty() {
+            do_work(cmds);
         }
     }
 }
