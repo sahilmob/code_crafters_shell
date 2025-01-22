@@ -2,6 +2,7 @@ mod commands;
 mod internal;
 
 use commands::*;
+use exec_bin::exec_bin;
 use internal::helpers::drain_current_cmd_args::*;
 use std::io::{self, Write};
 
@@ -19,7 +20,10 @@ fn run(cmds: &mut Vec<String>) -> String {
         cmd if cmd == "echo" => echo::echo(&mut cmd_args),
         cmd if cmd == "type" => r#type::r#type(&mut cmd_args),
         cmd if !cmd.is_empty() => format!("{}: command not found", cmd),
-        _ => "".to_string(),
+        _ => {
+            args.insert(0, cmd);
+            exec_bin(args)
+        }
     };
 
     if !args.is_empty() {
