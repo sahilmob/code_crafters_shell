@@ -20,8 +20,8 @@ fn run(cmds: &mut Vec<String>) -> String {
         cmd if cmd == "echo" => echo::echo(&mut cmd_args),
         cmd if cmd == "type" => r#type::r#type(&mut cmd_args),
         _ => {
-            args.insert(0, cmd);
-            exec_bin(args)
+            cmd_args.insert(0, cmd);
+            exec_bin(&mut cmd_args)
         }
     };
 
