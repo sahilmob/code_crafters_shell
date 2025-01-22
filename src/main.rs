@@ -16,9 +16,9 @@ fn run(cmds: &mut Vec<String>) -> String {
     let mut cmd_args = drain_current_cmd_args(args);
 
     let result = match cmd {
-        cmd if cmd == "exit" => exit::exit(&mut cmd_args),
-        cmd if cmd == "echo" => echo::echo(&mut cmd_args),
-        cmd if cmd == "type" => r#type::r#type(&mut cmd_args),
+        // cmd if cmd == "exit" => exit::exit(&mut cmd_args),
+        // cmd if cmd == "echo" => echo::echo(&mut cmd_args),
+        // cmd if cmd == "type" => r#type::r#type(&mut cmd_args),
         _ => {
             cmd_args.insert(0, cmd);
             exec_bin(&mut cmd_args)
