@@ -7,10 +7,6 @@ use internal::helpers::drain_current_cmd_args::*;
 use std::io::{self, Write};
 
 fn run(cmds: &mut Vec<String>) -> String {
-    if cmds.is_empty() {
-        return "".to_string();
-    }
-
     let cmd = cmds.remove(0);
     let args = cmds;
     let mut cmd_args = drain_current_cmd_args(args);

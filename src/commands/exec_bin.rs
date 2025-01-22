@@ -14,7 +14,7 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
 
             return match Command::new(cmd).args(args).output() {
                 Ok(v) => match String::from_utf8(v.stdout) {
-                    Ok(v) => v,
+                    Ok(v) => v.trim().to_string(),
                     Err(e) => e.to_string(),
                 },
                 Err(e) => e.to_string(),
