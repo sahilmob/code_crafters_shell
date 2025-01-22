@@ -13,7 +13,10 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
             let args = drain_current_cmd_args(args);
 
             return match Command::new(cmd).args(args).output() {
-                Ok(v) => String::from_utf8(v.stdout).unwrap(),
+                Ok(v) => match String::from_utf8(v.stdout) {
+                    Ok(v) => v,
+                    Err(e) => e.to_string(),
+                },
                 Err(e) => e.to_string(),
             };
         }
@@ -31,6 +34,6 @@ pub fn exec_bin(args: &mut Vec<String>) -> String {
 
     match BIN_PATHS.len() {
         n if n > 0 => format!("{}", handle_executables(&cmd, args)),
-        _ => format!("{}: not found", cmd),
+        _ => format!("{}: command not found", cmd),
     }
 }
