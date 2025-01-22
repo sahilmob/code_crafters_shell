@@ -1,4 +1,4 @@
-use std::env::{self, *};
+use std::env;
 
 pub static TYPE: &str = "pwd";
 
