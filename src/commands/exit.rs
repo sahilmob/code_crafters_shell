@@ -1,6 +1,6 @@
 pub static TYPE: &str = "exit";
 
-pub fn exit(args: Vec<&str>) {
+pub fn exit(args: &mut Vec<&str>) {
     if args.is_empty() {
         std::process::exit(0)
     }

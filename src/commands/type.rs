@@ -48,7 +48,7 @@ pub fn handle_executables(path: String, cmd: &str) -> String {
     format!("{} not found", cmd)
 }
 
-pub fn typ(args: Vec<&str>) {
+pub fn typ(args: &mut Vec<&str>) {
     if args.is_empty() {
         println!("not found")
     }
