@@ -25,11 +25,11 @@ fn run(cmds: &mut Vec<String>) -> String {
         }
     };
 
-    // if !args.is_empty() {
-    //     args.push(result);
+    if !args.is_empty() {
+        args.push(result);
 
-    //     return run(args);
-    // }
+        return run(args);
+    }
 
     result
 }
