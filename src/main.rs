@@ -12,10 +12,10 @@ fn run(cmds: &mut Vec<String>) -> String {
     let mut cmd_args = drain_current_cmd_args(args);
 
     let result = match cmd {
+        cmd if cmd == pwd::TYPE => pwd::pwd(),
         cmd if cmd == exit::TYPE => exit::exit(&mut cmd_args),
         cmd if cmd == echo::TYPE => echo::echo(&mut cmd_args),
         cmd if cmd == r#type::TYPE => r#type::r#type(&mut cmd_args),
-        cmd if cmd == pwd::TYPE => pwd::pwd(),
         _ => {
             cmd_args.insert(0, cmd);
             exec_bin(&mut cmd_args)
