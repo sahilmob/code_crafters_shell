@@ -3,13 +3,7 @@ mod commands;
 use commands::*;
 use std::io::{self, Write};
 
-fn run(cmds: &mut Vec<String>) -> String {
-    if cmds.is_empty() {
-        return "".to_string();
-    }
-
-    let cmd = cmds.remove(0);
-    let args = cmds;
+fn drain_current_cmd_args(args: &mut Vec<String>) -> Vec<String> {
     let mut cmd_args: Vec<String> = Vec::new();
 
     while !args.is_empty() {
@@ -19,6 +13,18 @@ fn run(cmds: &mut Vec<String>) -> String {
 
         cmd_args.push(args.remove(0));
     }
+
+    cmd_args
+}
+
+fn run(cmds: &mut Vec<String>) -> String {
+    if cmds.is_empty() {
+        return "".to_string();
+    }
+
+    let cmd = cmds.remove(0);
+    let args = cmds;
+    let mut cmd_args = drain_current_cmd_args(args);
 
     let result = match cmd {
         cmd if cmd == "exit" => exit::exit(&mut cmd_args),
