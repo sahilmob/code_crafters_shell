@@ -46,7 +46,9 @@ fn main() {
         let mut cmds: Vec<String> = input.trim().split(" ").map(|s| s.to_string()).collect();
 
         if !cmds.is_empty() {
-            println!("{}", run(&mut cmds));
+            let res = run(&mut cmds);
+            println!("------");
+            println!("{}", res);
         }
     }
 }
