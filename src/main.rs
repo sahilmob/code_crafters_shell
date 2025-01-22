@@ -47,7 +47,6 @@ fn main() {
 
         if !cmds.is_empty() {
             let res = run(&mut cmds);
-            println!("------");
             println!("{}", res);
         }
     }
