@@ -25,6 +25,8 @@ fn run(cmds: &mut Vec<String>) -> String {
         }
     };
 
+    dbg!(&args);
+
     if !args.is_empty() {
         args.push(result);
 
@@ -46,8 +48,7 @@ fn main() {
         let mut cmds: Vec<String> = input.trim().split(" ").map(|s| s.to_string()).collect();
 
         if !cmds.is_empty() {
-            let res = run(&mut cmds);
-            println!("{}", res);
+            println!("{}", run(&mut cmds));
         }
     }
 }
