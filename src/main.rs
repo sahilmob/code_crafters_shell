@@ -1,18 +1,9 @@
 mod commands;
-mod lib;
+mod internal;
 
 use commands::*;
+use internal::helpers::drain_current_cmd_args::*;
 use std::io::{self, Write};
-
-fn drain_current_cmd_args(args: &mut Vec<String>) -> Vec<String> {
-    let mut cmd_args: Vec<String> = Vec::new();
-
-    while !args.is_empty() && args[0] != "|" {
-        cmd_args.push(args.remove(0));
-    }
-
-    cmd_args
-}
 
 fn run(cmds: &mut Vec<String>) -> String {
     if cmds.is_empty() {

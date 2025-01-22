@@ -1,28 +1,10 @@
 use crate::{
-    echo, exit,
-    lib::helpers::{check_exec_path::*, split_path::*},
+    cmd_types::*,
+    internal::helpers::{check_exec_path::*, split_path::*},
 };
 use std::env;
 
 pub static TYPE: &str = "type";
-
-#[macro_export]
-macro_rules! typ {
-    ($($key: path),*) => {
-        {
-            use ::std::collections::HashMap;
-            let mut hm: HashMap<&str, String> = HashMap::new();
-
-            $ (
-                let mut s = String::from($key.to_string());
-                s.push_str(" is a shell builtin");
-                hm.insert($key, s);
-            )*
-
-            hm
-       }
-    };
-}
 
 pub fn handle_executables(path: String, cmd: &str) -> String {
     let exec_paths = split_path(&path);
@@ -42,12 +24,11 @@ pub fn r#type(args: &mut Vec<String>) -> String {
         return "not found".to_string();
     }
 
-    let hm = typ!(exit::TYPE, echo::TYPE, self::TYPE);
-
+    let hs = &CMD_TYPES;
     let cmd = args.remove(0);
 
-    match hm.get(cmd.as_str()) {
-        Some(v) => format!("{}", v),
+    match hs.get(cmd.as_str()) {
+        Some(v) => format!("{} is a shell builtin", v),
         None => match env::var("PATH") {
             Ok(v) => format!("{}", handle_executables(v, &cmd)),
             Err(_) => format!("{}: not found", cmd),
