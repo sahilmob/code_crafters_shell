@@ -22,7 +22,7 @@ fn run(cmds: &mut Vec<String>) -> String {
         _ => {
             cmd_args.insert(0, cmd);
             let res = exec_bin(&mut cmd_args);
-            println!("{}---", res);
+            println!("$ ", res);
             res
         }
     };
