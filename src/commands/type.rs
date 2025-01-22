@@ -1,6 +1,8 @@
-use crate::{echo, exit};
+use crate::{
+    echo, exit,
+    lib::helpers::{check_exec_path::*, split_path::*},
+};
 use std::env;
-use std::path::Path;
 
 pub static TYPE: &str = "type";
 
@@ -22,25 +24,12 @@ macro_rules! typ {
     };
 }
 
-fn split_path(path: &str) -> Vec<String> {
-    path.split(":").map(String::from).collect()
-}
-
-fn find_exec_in_dir(p: &str) -> bool {
-    let path = Path::new(&p);
-    if path.exists() {
-        return true;
-    }
-
-    false
-}
-
 pub fn handle_executables(path: String, cmd: &str) -> String {
     let exec_paths = split_path(&path);
 
     for p in exec_paths {
         let local_path = format!("{}/{}", p, cmd);
-        if find_exec_in_dir(&local_path) {
+        if check_exec_path(&local_path) {
             return format!("{} is {}", cmd, local_path);
         }
     }

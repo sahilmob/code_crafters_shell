@@ -1,4 +1,5 @@
 mod commands;
+mod lib;
 
 use commands::*;
 use std::io::{self, Write};
