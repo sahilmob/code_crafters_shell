@@ -43,13 +43,14 @@ fn main() {
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
 
-        let mut cmds: Vec<String> = input.trim().split(" ").map(|s| s.to_string()).collect();
+        let mut cmds: Vec<String> = input
+            .trim()
+            .split_whitespace()
+            .map(|s| s.to_string())
+            .collect();
 
         if !cmds.is_empty() {
-            println!("{}", run(&mut cmds));
+            io::stdout().write(run(&mut cmds).as_bytes()).unwrap();
         }
-
-        print!("$ ");
-        io::stdout().flush().unwrap();
     }
 }
