@@ -50,7 +50,9 @@ fn main() {
             .collect();
 
         if !cmds.is_empty() {
-            io::stdout().write(run(&mut cmds).as_bytes()).unwrap();
+            let mut result = run(&mut cmds);
+            result.push_str("\n");
+            io::stdout().write(result.as_bytes()).unwrap();
         }
     }
 }
