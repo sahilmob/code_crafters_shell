@@ -12,9 +12,8 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
         if check_exec_path(&local_path) {
             let args = drain_current_cmd_args(args);
             let mut command = Command::new(cmd);
-            args.iter().for_each(|a| {
-                command.arg(a);
-            });
+            dbg!(&args);
+            command.args(args);
 
             return match command.output() {
                 Ok(v) => String::from_utf8(v.stdout).unwrap(),
