@@ -43,6 +43,10 @@ fn main() {
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
 
+        if input.trim().len() == 0 {
+            continue;
+        }
+
         let mut cmds: Vec<String> = input
             .trim()
             .split_whitespace()
