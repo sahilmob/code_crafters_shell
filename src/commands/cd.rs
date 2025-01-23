@@ -9,7 +9,17 @@ pub fn cd(args: &mut Vec<String>) -> String {
     }
 
     let arg = args.remove(0);
-    let path = Path::new(&arg);
+    let path = if arg == "~" {
+        match env::var("HOME") {
+            Ok(home_path) => Path::new(&home_path).to_path_buf(),
+            Err(_) => {
+                println!("HOME not found");
+                Path::new(".").to_path_buf()
+            }
+        }
+    } else {
+        Path::new(&arg).to_path_buf()
+    };
 
     match env::set_current_dir(path) {
         Ok(_) => "".to_string(),
