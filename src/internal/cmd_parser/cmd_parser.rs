@@ -73,7 +73,7 @@ pub fn parse(input: String) -> Vec<String> {
                 .as_str()
                 .to_string();
 
-            result.push(token.clone());
+            result.push(" ".to_string());
 
             i += eat(&token);
         } else {
