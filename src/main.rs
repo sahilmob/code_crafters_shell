@@ -1,6 +1,7 @@
 mod commands;
 mod internal;
 
+use cd::cd;
 use commands::*;
 use exec_bin::exec_bin;
 use internal::helpers::drain_current_cmd_args::*;
@@ -13,6 +14,7 @@ fn run(cmds: &mut Vec<String>) -> String {
 
     let result = match cmd {
         cmd if cmd == pwd::TYPE => pwd::pwd(),
+        cmd if cmd == cd::TYPE => cd::cd(&mut cmd_args),
         cmd if cmd == exit::TYPE => exit::exit(&mut cmd_args),
         cmd if cmd == echo::TYPE => echo::echo(&mut cmd_args),
         cmd if cmd == r#type::TYPE => r#type::r#type(&mut cmd_args),
