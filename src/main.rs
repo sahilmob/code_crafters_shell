@@ -4,7 +4,7 @@ mod internal;
 use cd::cd;
 use commands::*;
 use exec_bin::exec_bin;
-use internal::helpers::drain_current_cmd_args::*;
+use internal::{cmd_parser::cmd_parser, helpers::drain_current_cmd_args::*};
 use std::io::{self, Write};
 
 fn run(cmds: &mut Vec<String>) -> String {
@@ -42,15 +42,11 @@ fn main() {
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
 
-        if input.trim().len() == 0 {
+        if input.trim().is_empty() {
             continue;
         }
 
-        let mut cmds: Vec<String> = input
-            .trim()
-            .split_whitespace()
-            .map(|s| s.to_string())
-            .collect();
+        let mut cmds: Vec<String> = cmd_parser::parse(input);
 
         if !cmds.is_empty() {
             let result = run(&mut cmds);
