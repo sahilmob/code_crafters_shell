@@ -53,7 +53,10 @@ fn main() {
             .collect();
 
         if !cmds.is_empty() {
-            println!("{}", run(&mut cmds));
+            let result = run(&mut cmds);
+            if !result.is_empty() {
+                println!("{}", result);
+            }
         }
     }
 }
