@@ -1,6 +1,6 @@
 use regex::Regex;
 
-static SPACE: &str = " ";
+static SPACE: &str = r#" +"#;
 static SINGLE_QUOTE: &str = "'";
 static CMD_SEGMENT: &str = r#"[^ ']+"#;
 static BETWEEN_SINGLE_QUOTE: &str = r#"[^']*"#;
@@ -13,7 +13,10 @@ fn match_single_quote(input: &str, i: usize) -> bool {
 }
 
 fn match_space(input: &str, i: usize) -> bool {
-    input[i..].starts_with(SPACE)
+    let r = Regex::new(SPACE).unwrap();
+    let mut loc = r.capture_locations();
+    r.captures_read_at(&mut loc, input, i);
+    loc.get(0).unwrap_or((usize::MAX, usize::MAX)).0 == i
 }
 
 fn match_cmd_segment(input: &str, i: usize) -> bool {
@@ -61,8 +64,18 @@ pub fn parse(input: String) -> Vec<String> {
 
             i += eat(SINGLE_QUOTE);
         } else if match_space(input, i) {
-            result.push(SPACE.to_string());
-            i += eat(SPACE)
+            let token = Regex::new(SPACE)
+                .unwrap()
+                .captures(&input[i..])
+                .unwrap()
+                .get(0)
+                .unwrap()
+                .as_str()
+                .to_string();
+
+            result.push(token.clone());
+
+            i += eat(&token);
         } else {
             panic!("Unexpected token at {}", i);
         }
