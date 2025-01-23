@@ -11,12 +11,8 @@ pub fn cd(args: &mut Vec<String>) -> String {
     let arg = args.remove(0);
     let path = Path::new(&arg);
 
-    if path.is_absolute() {
-        match env::set_current_dir(path) {
-            Ok(_) => "".trim().to_string(),
-            Err(_) => format!("cd: {}: No such file or directory", arg),
-        }
-    } else {
-        "".to_string()
+    match env::set_current_dir(path) {
+        Ok(_) => "".to_string(),
+        Err(_) => format!("cd: {}: No such file or directory", arg),
     }
 }
