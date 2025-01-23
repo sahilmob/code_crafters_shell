@@ -5,5 +5,5 @@ pub fn echo(args: &mut Vec<String>) -> String {
         return "".to_string();
     }
 
-    format!("{}", args.join(""))
+    format!("{}", args.join("").trim())
 }
