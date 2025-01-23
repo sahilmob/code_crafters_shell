@@ -1,6 +1,6 @@
 use crate::internal::{
     constants::{bin_paths::BIN_PATHS, cmd_types::*},
-    helpers::check_exec_path::*,
+    helpers::{check_exec_path::*, remove_empty_spaces_from_args::remove_empty_spaces_from_args},
 };
 
 pub static TYPE: &str = "type";
@@ -22,7 +22,7 @@ pub fn r#type(args: &mut Vec<String>) -> String {
     }
 
     let hs = &CMD_TYPES;
-    let cmd = args.remove(0);
+    let cmd = remove_empty_spaces_from_args(args).remove(0);
 
     match hs.get(cmd.as_str()) {
         Some(v) => format!("{} is a shell builtin", v),

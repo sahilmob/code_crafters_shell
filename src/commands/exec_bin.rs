@@ -1,6 +1,11 @@
 use crate::{
     drain_current_cmd_args,
-    internal::{constants::bin_paths::BIN_PATHS, helpers::check_exec_path::*},
+    internal::{
+        constants::bin_paths::BIN_PATHS,
+        helpers::{
+            check_exec_path::*, remove_empty_spaces_from_args::remove_empty_spaces_from_args,
+        },
+    },
 };
 use std::process::Command;
 
@@ -30,7 +35,7 @@ pub fn exec_bin(args: &mut Vec<String>) -> String {
         return "not found".to_string();
     }
 
-    let cmd = args.remove(0);
+    let cmd = remove_empty_spaces_from_args(args).remove(0);
 
     match BIN_PATHS.len() {
         n if n > 0 => format!("{}", handle_executables(&cmd, args)),

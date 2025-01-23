@@ -1,6 +1,8 @@
 use std::env;
 use std::path::Path;
 
+use crate::internal::helpers::remove_empty_spaces_from_args::remove_empty_spaces_from_args;
+
 pub static TYPE: &str = "cd";
 
 pub fn cd(args: &mut Vec<String>) -> String {
@@ -8,11 +10,7 @@ pub fn cd(args: &mut Vec<String>) -> String {
         return "".to_string();
     }
 
-    let arg = args
-        .iter()
-        .filter(|a| !a.trim().is_empty())
-        .collect::<Vec<_>>()
-        .remove(0);
+    let arg = remove_empty_spaces_from_args(args).remove(0);
     let path = if arg == "~" {
         match env::var("HOME") {
             Ok(home_path) => Path::new(&home_path).to_path_buf(),
