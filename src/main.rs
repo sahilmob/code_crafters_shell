@@ -48,8 +48,6 @@ fn main() {
 
         let mut cmds: Vec<String> = cmd_parser::parse(input);
 
-        dbg!(&cmds);
-
         if !cmds.is_empty() {
             let result = run(&mut cmds);
             if !result.is_empty() {
