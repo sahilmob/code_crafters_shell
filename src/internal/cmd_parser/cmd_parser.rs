@@ -61,7 +61,7 @@ pub fn parse(input: String) -> Vec<String> {
 
             i += eat(SINGLE_QUOTE);
         } else if match_space(input, i) {
-            result.push(SPACE.to_string());
+            // result.push(SPACE.to_string());
             i += eat(SPACE)
         } else {
             panic!("Unexpected token at {}", i);
