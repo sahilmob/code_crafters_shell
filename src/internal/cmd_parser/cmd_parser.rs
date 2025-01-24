@@ -99,22 +99,10 @@ pub fn parse(input: String) -> Vec<String> {
 
             i += eat(SINGLE_QUOTE);
         } else if match_back_slash(input, i) {
-            i += eat(BACK_SLASH);
-            result.push(input[i..i].to_string());
-            i += 1;
+            i += eat("\\");
         } else if match_space(input, i) {
-            let token = Regex::new(SPACE)
-                .unwrap()
-                .captures(&input[i..])
-                .unwrap()
-                .get(0)
-                .unwrap()
-                .as_str()
-                .to_string();
-
             result.push(" ".to_string());
-
-            i += eat(&token);
+            i += eat(" ");
         } else {
             panic!("Unexpected token at {}", i);
         }
