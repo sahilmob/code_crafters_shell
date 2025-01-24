@@ -23,7 +23,7 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
                         if args.contains(&">".to_string()) {
                             return "".to_string();
                         } else {
-                            v.trim().to_string()
+                            return v.trim().to_string();
                         }
                     }
                     Err(e) => e.to_string(),
