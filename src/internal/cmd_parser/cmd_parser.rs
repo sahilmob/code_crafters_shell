@@ -103,8 +103,17 @@ pub fn parse(input: String) -> Vec<String> {
             result.push(input[i..i + 1].to_string());
             i += 1;
         } else if match_space(input, i) {
+            let token = Regex::new(SPACE)
+                .unwrap()
+                .captures(&input[i..])
+                .unwrap()
+                .get(0)
+                .unwrap()
+                .as_str()
+                .to_string();
+
             result.push(" ".to_string());
-            i += eat(" ");
+            i += eat(&token);
         } else {
             panic!("Unexpected token at {}", i);
         }
