@@ -100,8 +100,8 @@ pub fn parse(input: String) -> Vec<String> {
             i += eat(SINGLE_QUOTE);
         } else if match_back_slash(input, i) {
             i += eat(BACK_SLASH);
-            // result.push(input[i..i + 1].to_string());
-            // i += 1;
+            result.push(input[i..i + 1].to_string());
+            i += 1;
         } else if match_space(input, i) {
             let token = Regex::new(SPACE)
                 .unwrap()
