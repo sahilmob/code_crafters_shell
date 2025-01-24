@@ -23,10 +23,7 @@ fn match_double_quote(input: &str, i: usize) -> bool {
 }
 
 fn match_back_slash(input: &str, i: usize) -> bool {
-    let r = Regex::new(BACK_SLASH).unwrap();
-    let mut loc = r.capture_locations();
-    r.captures_read_at(&mut loc, input, i);
-    loc.get(0).unwrap_or((usize::MAX, usize::MAX)).0 == i
+    input[i..].starts_with(BACK_SLASH)
 }
 
 fn match_space(input: &str, i: usize) -> bool {
