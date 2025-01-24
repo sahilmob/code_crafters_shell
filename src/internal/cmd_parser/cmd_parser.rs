@@ -7,6 +7,7 @@ static BACK_SLASH: &str = r"\\";
 static SINGLE_QUOTE: &str = "'";
 static DOUBLE_QUOTE: &str = "\"";
 static CMD_SEGMENT: &str = r#"[^ '"\\]+"#;
+static ESCAPE_SYMBOLS: &str = r#"[\\$"]+"#;
 static BETWEEN_SINGLE_QUOTES: &str = r#"[^']*"#;
 static BETWEEN_DOUBLE_QUOTES: &str = r#"(?:[^"\\]|\\.)*"#;
 
@@ -16,7 +17,7 @@ fn parse_between_double_quotes(input: &str) -> String {
     let mut result = String::new();
 
     while i < input.len() {
-        if input[i..i + 1] == *"\\" && !matched_escape {
+        if input[i..i + 1] == *"\\" && !matched_escape && matcher!(ESCAPE_SYMBOLS, input, i + 1) {
             matched_escape = true;
             i += 1;
             continue;
