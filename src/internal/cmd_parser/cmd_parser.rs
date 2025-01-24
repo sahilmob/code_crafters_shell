@@ -96,8 +96,8 @@ pub fn parse(input: String) -> Vec<String> {
             i += eat(&token);
         } else if match_double_quote(input, i) {
             i += eat(DOUBLE_QUOTE);
-            let token = token_extractor!(BETWEEN_DOUBLE_QUOTES, input, i).as_str();
-            let parsed_token = parse_between_double_quotes(token);
+            let token = token_extractor!(BETWEEN_DOUBLE_QUOTES, input, i);
+            let parsed_token = parse_between_double_quotes(token.as_str());
 
             // let token = Regex::new(BETWEEN_DOUBLE_QUOTES)
             //     .unwrap()
@@ -108,7 +108,7 @@ pub fn parse(input: String) -> Vec<String> {
             //     .as_str()
             //     .to_string();
 
-            if !token.is_empty() {
+            if !parsed_token.is_empty() {
                 result.push(parsed_token);
                 i += eat(&token);
             }
