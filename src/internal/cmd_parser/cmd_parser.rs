@@ -4,7 +4,7 @@ static SPACE: &str = r#" +"#;
 static BACK_SLASH: &str = r"\\";
 static SINGLE_QUOTE: &str = "'";
 static DOUBLE_QUOTE: &str = "\"";
-static CMD_SEGMENT: &str = r#"[^ '"\]+"#;
+static CMD_SEGMENT: &str = r#"[^ '"\\]+"#;
 static BETWEEN_SINGLE_QUOTES: &str = r#"[^']*"#;
 static BETWEEN_DOUBLE_QUOTES: &str = r#"[^"]*"#;
 
