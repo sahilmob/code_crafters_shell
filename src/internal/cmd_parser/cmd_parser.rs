@@ -1,6 +1,7 @@
 use regex::Regex;
 
 static SPACE: &str = r#" +"#;
+static BACK_SLASH: &str = "\\";
 static SINGLE_QUOTE: &str = "'";
 static DOUBLE_QUOTE: &str = "\"";
 static CMD_SEGMENT: &str = r#"[^ '"]+"#;
@@ -16,6 +17,13 @@ fn match_single_quote(input: &str, i: usize) -> bool {
 
 fn match_double_quote(input: &str, i: usize) -> bool {
     let r = Regex::new(DOUBLE_QUOTE).unwrap();
+    let mut loc = r.capture_locations();
+    r.captures_read_at(&mut loc, input, i);
+    loc.get(0).unwrap_or((usize::MAX, usize::MAX)).0 == i
+}
+
+fn match_back_slash(input: &str, i: usize) -> bool {
+    let r = Regex::new(BACK_SLASH).unwrap();
     let mut loc = r.capture_locations();
     r.captures_read_at(&mut loc, input, i);
     loc.get(0).unwrap_or((usize::MAX, usize::MAX)).0 == i
@@ -90,6 +98,10 @@ pub fn parse(input: String) -> Vec<String> {
             }
 
             i += eat(SINGLE_QUOTE);
+        } else if match_back_slash(input, i) {
+            i += eat(BACK_SLASH);
+            // result.push(input[i..i + 1].to_string());
+            // i += 1;
         } else if match_space(input, i) {
             let token = Regex::new(SPACE)
                 .unwrap()
