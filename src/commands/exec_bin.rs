@@ -35,10 +35,11 @@ pub fn exec_bin(args: &mut Vec<String>) -> String {
         return "not found".to_string();
     }
 
-    let cmd = remove_empty_spaces_from_args(args).remove(0);
+    let mut args = remove_empty_spaces_from_args(args);
+    let cmd = args.remove(0);
 
     match BIN_PATHS.len() {
-        n if n > 0 => format!("{}", handle_executables(&cmd, args)),
+        n if n > 0 => format!("{}", handle_executables(&cmd, &mut args)),
         _ => format!("{}: command not found", cmd),
     }
 }
