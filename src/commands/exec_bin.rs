@@ -17,9 +17,15 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
         if check_exec_path(&local_path) {
             let args = drain_current_cmd_args(args);
 
-            return match Command::new(cmd).args(args).output() {
+            return match Command::new(cmd).args(&args).output() {
                 Ok(v) => match String::from_utf8(v.stdout) {
-                    Ok(v) => v.trim().to_string(),
+                    Ok(v) => {
+                        if args.contains(&">".to_string()) {
+                            return "".to_string();
+                        } else {
+                            v.trim().to_string()
+                        }
+                    }
                     Err(e) => e.to_string(),
                 },
                 Err(e) => e.to_string(),
