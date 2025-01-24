@@ -1,7 +1,7 @@
 use regex::Regex;
 
 static SPACE: &str = r#" +"#;
-static BACK_SLASH: &str = "\\";
+static BACK_SLASH: &str = r"\\";
 static SINGLE_QUOTE: &str = "'";
 static DOUBLE_QUOTE: &str = "\"";
 static CMD_SEGMENT: &str = r#"[^ '"]+"#;
@@ -23,7 +23,10 @@ fn match_double_quote(input: &str, i: usize) -> bool {
 }
 
 fn match_back_slash(input: &str, i: usize) -> bool {
-    input[i..].starts_with(BACK_SLASH)
+    let r = Regex::new(BACK_SLASH).unwrap();
+    let mut loc = r.capture_locations();
+    r.captures_read_at(&mut loc, input, i);
+    loc.get(0).unwrap_or((usize::MAX, usize::MAX)).0 == i
 }
 
 fn match_space(input: &str, i: usize) -> bool {
