@@ -10,12 +10,12 @@ use internal::{
 };
 use std::io::{self, Write};
 
-fn run(cmds: &mut Vec<String>) -> String {
+fn run(cmds: &mut Vec<String>) -> Result<String, String> {
     let cmd = cmds.remove(0);
     let args = cmds;
     let mut cmd_args = drain_current_cmd_args(args);
 
-    let result = match cmd {
+    let result: Result<String, String> = match cmd {
         cmd if cmd == pwd::TYPE => pwd::pwd(),
         cmd if cmd == cd::TYPE => cd::cd(&mut cmd_args),
         cmd if cmd == exit::TYPE => exit::exit(&mut cmd_args),
@@ -28,9 +28,15 @@ fn run(cmds: &mut Vec<String>) -> String {
     };
 
     if !args.is_empty() {
-        args.push(result);
-
-        return run(args);
+        match result {
+            Ok(v) => {
+                args.push(v);
+                return run(args);
+            }
+            Err(e) => {
+                return Err(e);
+            }
+        }
     }
 
     result
@@ -50,12 +56,17 @@ fn main() {
         }
 
         let cmds: Vec<String> = cmd_parser::parse(input);
-        let (mut args, mut handle) = get_output_handle(&cmds);
+        let (mut args, mut handle, mut err_handle) = get_output_handle(&cmds);
 
         if !cmds.is_empty() {
             let result = run(&mut args);
-            if !result.is_empty() {
-                writeln!(handle, "{}", result).unwrap()
+            match result {
+                Ok(v) => {
+                    if !v.is_empty() {
+                        writeln!(handle, "{}", v).unwrap()
+                    }
+                }
+                Err(e) => writeln!(err_handle, "{}", e).unwrap(),
             }
         }
     }

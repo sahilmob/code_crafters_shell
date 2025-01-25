@@ -5,9 +5,9 @@ use crate::internal::helpers::remove_empty_spaces_from_args::remove_empty_spaces
 
 pub static TYPE: &str = "cd";
 
-pub fn cd(args: &mut Vec<String>) -> String {
+pub fn cd(args: &mut Vec<String>) -> Result<String, String> {
     if args.is_empty() {
-        return "".to_string();
+        return Ok("".to_string());
     }
 
     let arg = remove_empty_spaces_from_args(args).remove(0);
@@ -24,7 +24,7 @@ pub fn cd(args: &mut Vec<String>) -> String {
     };
 
     match env::set_current_dir(path) {
-        Ok(_) => "".to_string(),
-        Err(_) => format!("cd: {}: No such file or directory", arg),
+        Ok(_) => Ok("".to_string()),
+        Err(_) => Err(format!("cd: {}: No such file or directory", arg)),
     }
 }
