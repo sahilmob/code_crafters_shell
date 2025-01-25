@@ -25,10 +25,6 @@ pub fn r#type(args: &mut Vec<String>) -> CmdOutput {
     let hs = &CMD_TYPES;
     let cmd = remove_empty_spaces_from_args(args).remove(0);
 
-    if cmd == "cat" {
-        return (Some("cat is /usr/bin/cat".to_string()), None);
-    }
-
     match hs.get(cmd.as_str()) {
         Some(v) => (Some(format!("{} is a shell builtin", v)), None),
         None => match BIN_PATHS.len() {

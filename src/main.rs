@@ -59,18 +59,15 @@ fn main() {
 
         if !cmds.is_empty() {
             let (result, err) = run(&mut args);
-            match result {
-                Some(v) => {
-                    if !v.is_empty() {
-                        writeln!(handle, "{}", v).unwrap()
-                    }
+            if result.is_some() {
+                let v = result.unwrap();
+                if !v.is_empty() {
+                    writeln!(handle, "{}", v).unwrap()
                 }
-                None => (),
             }
 
-            match err {
-                Some(e) => writeln!(err_handle, "{}", e).unwrap(),
-                None => (),
+            if err.is_some() {
+                writeln!(err_handle, "{}", err.unwrap()).unwrap()
             }
         }
     }
