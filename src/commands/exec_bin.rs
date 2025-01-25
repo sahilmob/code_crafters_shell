@@ -18,23 +18,25 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> CmdOutput {
         let local_path = format!("{}/{}", p, cmd);
         if check_exec_path(&local_path) {
             let args = drain_current_cmd_args(args);
+            let output = Command::new(cmd).args(args).output().unwrap();
 
-            return match Command::new(cmd).args(args).output() {
-                Ok(v) => match String::from_utf8(v.stderr) {
-                    Ok(e) => {
-                        if !e.trim().is_empty() {
-                            return (None, Some(e.trim().to_string()));
-                        }
-
-                        match String::from_utf8(v.stdout) {
-                            Ok(v) => (Some(v.trim().to_string()), None),
-                            Err(e) => (None, Some(e.to_string())),
-                        }
-                    }
-                    Err(e) => (None, Some(e.to_string())),
-                },
-                Err(e) => (None, Some(e.to_string())),
+            let result = match String::from_utf8(output.stdout) {
+                Ok(v) => Some(v.trim().to_string()),
+                Err(_) => None,
             };
+
+            let err = match String::from_utf8(output.stderr) {
+                Ok(e) => {
+                    if !e.trim().is_empty() {
+                        Some(e.trim().to_string())
+                    } else {
+                        None
+                    }
+                }
+                Err(e) => Some(e.to_string()),
+            };
+
+            return (result, err);
         }
     }
 
