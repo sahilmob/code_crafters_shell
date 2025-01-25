@@ -40,25 +40,18 @@ pub fn get_output_handle(cmds: &Vec<String>) -> (Vec<String>, Box<dyn Write>, Bo
                 .open(output_file)
                 .unwrap(),
         )
-        // match std::fs::File::create(&output_file) {
-        //     Ok(file) => Box::new(std::io::BufWriter::new(file)),
-        //     Err(e) => {
-        //         eprintln!("Failed to create output file {}: {}", output_file, e);
-        //         Box::new(std::io::stdout())
-        //     }
-        // }
     } else {
         Box::new(std::io::stdout())
     };
 
     let err_handle: Box<dyn Write> = if let Some(err_file) = err_file {
-        match std::fs::File::create(&err_file) {
-            Ok(file) => Box::new(std::io::BufWriter::new(file)),
-            Err(e) => {
-                eprintln!("Failed to create error file {}: {}", err_file, e);
-                Box::new(std::io::stdout())
-            }
-        }
+        Box::new(
+            OpenOptions::new()
+                .append(true)
+                .create(true)
+                .open(err_file)
+                .unwrap(),
+        )
     } else {
         Box::new(std::io::stdout())
     };
