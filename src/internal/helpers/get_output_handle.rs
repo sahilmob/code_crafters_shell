@@ -14,7 +14,7 @@ fn parse_redirection(args: &Vec<String>) -> (Vec<String>, Option<String>, Option
                 i += 3;
                 continue;
             }
-        } else if args[i] == "2>" {
+        } else if args[i] == "2>" || args[i] == "2>>" {
             if i + 2 < args.len() {
                 err_file = Some(args[i + 2].clone());
 
