@@ -7,7 +7,7 @@ fn parse_redirection(args: &Vec<String>) -> (Vec<String>, Option<String>, Option
     let mut err_file = None;
     let mut output_file = None;
     while i < args.len() {
-        if args[i] == ">" || args[i] == "1>" {
+        if args[i] == ">" || args[i] == "1>" || args[i] == ">>" || args[i] == "1>>" {
             if i + 2 < args.len() {
                 output_file = Some(args[i + 2].clone());
 
