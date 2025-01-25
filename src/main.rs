@@ -7,15 +7,16 @@ use exec_bin::exec_bin;
 use internal::{
     cmd_parser::cmd_parser,
     helpers::{drain_current_cmd_args::*, get_output_handle::get_output_handle},
+    types::cmd_output::CmdOutput,
 };
 use std::io::{self, Write};
 
-fn run(cmds: &mut Vec<String>) -> Result<String, String> {
+fn run(cmds: &mut Vec<String>) -> CmdOutput {
     let cmd = cmds.remove(0);
     let args = cmds;
     let mut cmd_args = drain_current_cmd_args(args);
 
-    let result: Result<String, String> = match cmd {
+    let result: CmdOutput = match cmd {
         cmd if cmd == pwd::TYPE => pwd::pwd(),
         cmd if cmd == cd::TYPE => cd::cd(&mut cmd_args),
         cmd if cmd == exit::TYPE => exit::exit(&mut cmd_args),
@@ -29,13 +30,11 @@ fn run(cmds: &mut Vec<String>) -> Result<String, String> {
 
     if !args.is_empty() {
         match result {
-            Ok(v) => {
+            (Some(v), _) => {
                 args.push(v);
                 return run(args);
             }
-            Err(e) => {
-                return Err(e);
-            }
+            _ => return result,
         }
     }
 
@@ -59,14 +58,19 @@ fn main() {
         let (mut args, mut handle, mut err_handle) = get_output_handle(&cmds);
 
         if !cmds.is_empty() {
-            let result = run(&mut args);
+            let (result, err) = run(&mut args);
             match result {
-                Ok(v) => {
+                Some(v) => {
                     if !v.is_empty() {
                         writeln!(handle, "{}", v).unwrap()
                     }
                 }
-                Err(e) => writeln!(err_handle, "{}", e).unwrap(),
+                None => (),
+            }
+
+            match err {
+                Some(e) => writeln!(err_handle, "{}", e).unwrap(),
+                None => (),
             }
         }
     }

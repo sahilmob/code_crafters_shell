@@ -1,9 +1,11 @@
+use crate::internal::types::cmd_output::CmdOutput;
+
 pub static TYPE: &str = "echo";
 
-pub fn echo(args: &mut Vec<String>) -> Result<String, String> {
+pub fn echo(args: &mut Vec<String>) -> CmdOutput {
     if args.is_empty() {
-        return Ok("".to_string());
+        return (Some("".to_string()), None);
     }
 
-    Ok(format!("{}", args.join("").trim()))
+    (Some(format!("{}", args.join("").trim())), None)
 }
