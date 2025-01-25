@@ -19,9 +19,12 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> Result<String, S
             let args = drain_current_cmd_args(args);
 
             return match Command::new(cmd).args(args).output() {
-                Ok(v) => match String::from_utf8(v.stdout) {
-                    Ok(v) => Ok(v.trim().to_string()),
-                    Err(e) => Err(e.to_string()),
+                Ok(v) => match String::from_utf8(v.stderr) {
+                    Ok(v) => Err(v.trim().to_string()),
+                    Err(_) => match String::from_utf8(v.stdout) {
+                        Ok(v) => Ok(v.trim().to_string()),
+                        Err(e) => Err(e.to_string()),
+                    },
                 },
                 Err(e) => Err(e.to_string()),
             };
