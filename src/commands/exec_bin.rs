@@ -1,3 +1,6 @@
+use std::io::Write;
+use std::process::{exit, Command, Stdio};
+
 use crate::{
     drain_current_cmd_args,
     internal::{
@@ -7,9 +10,25 @@ use crate::{
         },
     },
 };
-use std::process::Command;
 
 pub static TYPE: &str = "exec_bin";
+
+pub fn handle_path_cmd(cmd: &str, args: &[&String], mut handle: Box<dyn Write>) {
+    let output = Command::new(cmd)
+        .args(args)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .output();
+    match output {
+        Ok(output) => {
+            handle.write_all(&output.stdout).unwrap();
+            std::io::stderr().write_all(&output.stderr).unwrap();
+        }
+        Err(e) => {
+            eprintln!("Failed to execute {}: {}", cmd, e);
+        }
+    }
+}
 
 pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
     for p in BIN_PATHS.iter() {
@@ -17,15 +36,9 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
         if check_exec_path(&local_path) {
             let args = drain_current_cmd_args(args);
 
-            return match Command::new(cmd).args(&args).output() {
+            return match Command::new(cmd).args(args).output() {
                 Ok(v) => match String::from_utf8(v.stdout) {
-                    Ok(v) => {
-                        if args.contains(&">".to_string()) {
-                            return "".to_string();
-                        } else {
-                            return v.trim().to_string();
-                        }
-                    }
+                    Ok(v) => v.trim().to_string(),
                     Err(e) => e.to_string(),
                 },
                 Err(e) => e.to_string(),

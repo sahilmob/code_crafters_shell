@@ -4,7 +4,10 @@ mod internal;
 use cd::cd;
 use commands::*;
 use exec_bin::exec_bin;
-use internal::{cmd_parser::cmd_parser, helpers::drain_current_cmd_args::*};
+use internal::{
+    cmd_parser::cmd_parser,
+    helpers::{drain_current_cmd_args::*, get_output_handle::get_output_handle},
+};
 use std::io::{self, Write};
 
 fn run(cmds: &mut Vec<String>) -> String {
@@ -46,14 +49,13 @@ fn main() {
             continue;
         }
 
-        let mut cmds: Vec<String> = cmd_parser::parse(input);
-
-        // dbg!(&cmds);
+        let cmds: Vec<String> = cmd_parser::parse(input);
+        let (mut args, mut handle) = get_output_handle(&cmds);
 
         if !cmds.is_empty() {
-            let result = run(&mut cmds);
+            let result = run(&mut args);
             if !result.is_empty() {
-                println!("{}", result);
+                writeln!(handle, "{}", result).unwrap()
             }
         }
     }
