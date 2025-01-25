@@ -1,3 +1,4 @@
+use std::fs::OpenOptions;
 use std::io::Write;
 
 fn parse_redirection(args: &Vec<String>) -> (Vec<String>, Option<String>, Option<String>) {
@@ -32,13 +33,20 @@ pub fn get_output_handle(cmds: &Vec<String>) -> (Vec<String>, Box<dyn Write>, Bo
     let (args, output_file, err_file) = parse_redirection(cmds);
 
     let handle: Box<dyn Write> = if let Some(output_file) = output_file {
-        match std::fs::File::create(&output_file) {
-            Ok(file) => Box::new(std::io::BufWriter::new(file)),
-            Err(e) => {
-                eprintln!("Failed to create output file {}: {}", output_file, e);
-                Box::new(std::io::stdout())
-            }
-        }
+        Box::new(
+            OpenOptions::new()
+                .append(true)
+                .create(true)
+                .open(output_file)
+                .unwrap(),
+        )
+        // match std::fs::File::create(&output_file) {
+        //     Ok(file) => Box::new(std::io::BufWriter::new(file)),
+        //     Err(e) => {
+        //         eprintln!("Failed to create output file {}: {}", output_file, e);
+        //         Box::new(std::io::stdout())
+        //     }
+        // }
     } else {
         Box::new(std::io::stdout())
     };
