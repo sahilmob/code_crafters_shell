@@ -1,4 +1,4 @@
-use std::process::Command;
+use std::{io::Write, process::Command};
 
 use crate::{
     drain_current_cmd_args,
@@ -19,10 +19,13 @@ pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
             let args = drain_current_cmd_args(args);
 
             return match Command::new(cmd).args(args).output() {
-                Ok(v) => match String::from_utf8(v.stdout) {
-                    Ok(v) => v.trim().to_string(),
-                    Err(e) => e.to_string(),
-                },
+                Ok(v) => {
+                    std::io::stderr().write_all(&v.stderr).unwrap();
+                    match String::from_utf8(v.stdout) {
+                        Ok(v) => v.trim().to_string(),
+                        Err(e) => e.to_string(),
+                    }
+                }
                 Err(e) => e.to_string(),
             };
         }
