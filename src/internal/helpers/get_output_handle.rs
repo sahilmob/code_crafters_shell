@@ -6,10 +6,10 @@ fn parse_redirection(args: &Vec<String>) -> (Vec<String>, Option<String>) {
     let mut output_file = None;
     while i < args.len() {
         if args[i] == ">" || args[i] == "1>" {
-            if i + 1 < args.len() {
-                output_file = Some(args[i + 1].clone());
+            if i + 2 < args.len() {
+                output_file = Some(args[i + 2].clone());
 
-                i += 2;
+                i += 3;
                 continue;
             }
         }
