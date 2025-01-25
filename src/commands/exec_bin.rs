@@ -1,5 +1,4 @@
-use std::io::Write;
-use std::process::{exit, Command, Stdio};
+use std::process::Command;
 
 use crate::{
     drain_current_cmd_args,
@@ -12,23 +11,6 @@ use crate::{
 };
 
 pub static TYPE: &str = "exec_bin";
-
-pub fn handle_path_cmd(cmd: &str, args: &[&String], mut handle: Box<dyn Write>) {
-    let output = Command::new(cmd)
-        .args(args)
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .output();
-    match output {
-        Ok(output) => {
-            handle.write_all(&output.stdout).unwrap();
-            std::io::stderr().write_all(&output.stderr).unwrap();
-        }
-        Err(e) => {
-            eprintln!("Failed to execute {}: {}", cmd, e);
-        }
-    }
-}
 
 pub fn handle_executables(cmd: &str, args: &mut Vec<String>) -> String {
     for p in BIN_PATHS.iter() {
