@@ -1,4 +1,4 @@
-use std::{io::Write, process::Command};
+use std::process::Command;
 
 use crate::{
     drain_current_cmd_args,
