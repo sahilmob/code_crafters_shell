@@ -9,5 +9,5 @@ pub fn exit(args: &mut Vec<String>) -> Result<String, String> {
 
     let code = remove_empty_spaces_from_args(args).remove(0);
 
-    Ok(std::process::exit(code.parse::<i32>().unwrap_or(0)))
+    std::process::exit(code.parse::<i32>().unwrap_or(0));
 }
